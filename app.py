@@ -4,10 +4,14 @@ import json
 app = Flask (__name__)
 
 desenvolvedores = [
-    {'nome':'Alessandro',
-     'skills': ['Python','Flask', 'Django']},
-    {'nome':'Andresa',
-     'skills': ['Java', 'Spring']}
+    {
+        'id':'0,',
+        'nome':'Alessandro',
+        'skills': ['Python','Flask', 'Django']},
+    {
+        'id':'1',
+        'nome':'Andresa',
+        'skills': ['Java', 'Spring']}
 ]
 
 @app.route('/dev/<int:id>/', methods=['GET', 'PUT', 'DELETE'])
@@ -30,9 +34,18 @@ def desenvolvedor(id):
         desenvolvedores.pop(id)
         return jsonify({'status':'sucesso', 'mensagem':'registro excluido'})
 
-
+@app.route('/dev/', methods=['POST', 'GET'])
 def lista_devs():
-    pass
+    if request.method == 'POST':
+        dados = json.loads(request.data)
+        posicao =len(desenvolvedores)
+        dados['id'] = posicao
+        desenvolvedores.append(dados)
+        return jsonify(desenvolvedores[posicao])
+    elif request.method == 'GET':
+        return jsonify(desenvolvedores)
+
+
 
 
 if __name__ == '__main__':
